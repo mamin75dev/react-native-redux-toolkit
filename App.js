@@ -1,56 +1,32 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  useColorScheme,
-  Button,
-  NativeModules,
-} from 'react-native';
-import {PERMISSIONS} from 'react-native-permissions';
-import {checkPermission, requestPermission} from './persmissionHelper';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-const {InAppUpdate, ReactToast} = NativeModules;
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+import {View, Text, StyleSheet, NativeModules} from 'react-native';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+const {ShakeDetectionModule} = NativeModules;
 
-  const onPressUpdate = () => {
-    checkPermission(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE)
-      .then(res => {
-        InAppUpdate.updateApp('https://ver.daapapp.com/android/v3.apk');
-      })
-      .catch(
-        requestPermission(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE)
-          .then(res => {
-            InAppUpdate.updateApp('https://ver.daapapp.com/android/v3.apk');
-          })
-          .catch(res => {
-            ReactToast.showToast('ridi dadash');
-          }),
-      );
-  };
+function App() {
+  return <AppContent />;
+}
+
+const AppContent = () => {
+  React.useEffect(() => {
+    ShakeDetectionModule.shakeDetection();
+  }, []);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <Button
-        style={styles.button}
-        onPress={onPressUpdate}
-        title="Learn More"
-        color="#841584"
-      />
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Text>Shake device</Text>
+    </View>
   );
 };
 
+export default App;
+
 const styles = StyleSheet.create({
-  button: {
-    alignSelf: 'center',
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    paddingTop: 40,
   },
 });
-
-export default App;
+``

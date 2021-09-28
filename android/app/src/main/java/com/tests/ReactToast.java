@@ -9,7 +9,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
 public class ReactToast extends ReactContextBaseJavaModule {
-  ReactApplicationContext context;
+  private ReactApplicationContext context;
 
   ReactToast(ReactApplicationContext context) {
     super(context);

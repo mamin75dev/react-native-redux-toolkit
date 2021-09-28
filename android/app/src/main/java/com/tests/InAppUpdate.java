@@ -22,7 +22,7 @@ import java.io.File;
 
 public class InAppUpdate extends ReactContextBaseJavaModule {
 
-  ReactApplicationContext context;
+  private ReactApplicationContext context;
   private final String FILE_NAME = "SampleDownloadApp.apk";
   private final String FILE_BASE_PATH = "file://";
   private final String MIME_TYPE = "application/vnd.android.package-archive";

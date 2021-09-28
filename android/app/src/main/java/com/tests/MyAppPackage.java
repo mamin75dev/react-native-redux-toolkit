@@ -23,6 +23,7 @@ public class MyAppPackage implements ReactPackage {
 
     modules.add(new InAppUpdate(reactContext));
     modules.add(new ReactToast(reactContext));
+    modules.add(new VersionData(reactContext));
 
     return modules;
   }

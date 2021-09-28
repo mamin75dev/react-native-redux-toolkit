@@ -12,6 +12,11 @@ target 'tests' do
     :hermes_enabled => false
   )
 
+  pod 'RNMlKit', :path => '../node_modules/react-native-firebase-mlkit'
+
+  pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
+
+
   target 'testsTests' do
     inherit! :complete
     # Pods for testing
