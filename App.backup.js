@@ -19,9 +19,9 @@ const App = () => {
   };
 
   const onPressUpdate = () => {
-    VersionData.getVersionData().then(res => {
-      ReactToast.showToast(res);
-    });
+    ReactToast.showToast(
+      'مبلغ اعتبار این تراکنش قبلا به وجه نقد تبدیل شده است.',
+    );
     // checkPermission(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE)
     //   .then(res => {
     //     InAppUpdate.updateApp('https://ver.daapapp.com/android/v3.apk');

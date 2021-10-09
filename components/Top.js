@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Button, Platform} from 'react-native';
 
-import {AppTour, AppTourView} from 'react-native-app-tour';
+import {AppTour, AppTourView} from 'onsensei-react-native-app-tour';
 
 class Top extends Component {
   render() {

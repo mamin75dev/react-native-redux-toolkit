@@ -1,5 +1,11 @@
 package com.tests;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Build;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,9 +21,19 @@ public class ReactToast extends ReactContextBaseJavaModule {
     super(context);
     this.context = context;
   }
+
   @ReactMethod
   public void showToast(String message) {
-    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+    View view = toast.getView();
+//    view.setBackgroundResource(R.drawable.toast_shape);
+    TextView textView = view.findViewById(android.R.id.message);
+    textView.setTextColor(Color.parseColor("#FFFFFF"));
+    Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/Vazir-Medium-FD-WOL.ttf");
+    textView.setTypeface(typeface);
+    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+    textView.setGravity(Gravity.CENTER);
+    toast.show();
   }
 
   @NonNull

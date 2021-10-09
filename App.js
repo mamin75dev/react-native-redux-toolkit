@@ -1,121 +1,172 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {
-  Platform,
   StyleSheet,
   Text,
+  Image,
   View,
-  Button,
-  DeviceEventEmitter,
+  TouchableOpacity,
+  Switch,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-import {AppTour, AppTourSequence, AppTourView} from 'react-native-app-tour';
+import {copilot, walkthroughable, CopilotStep} from 'react-native-copilot';
 
-import Top from './components/Top';
-import Center from './components/Center';
-import Bottom from './components/Bottom';
+const WalkthroughableText = walkthroughable(Text);
+const WalkthroughableImage = walkthroughable(Image);
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    paddingTop: 40,
+  },
+  title: {
+    fontSize: 24,
+    textAlign: 'center',
+    height: 100,
+  },
+  profilePhoto: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    marginVertical: 20,
+  },
+  middleView: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: '#2980b9',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  tabItem: {
+    flex: 1,
+    textAlign: 'center',
+    height: 70,
+  },
+  activeSwitchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+    alignItems: 'center',
+    paddingHorizontal: 40,
+  },
 });
 
-export default class App extends Component<{}> {
-  constructor(props) {
-    super(props);
-
-    this.appTourTargets = [];
-  }
-
-  componentWillMount() {
-    console.log('componentWillMount');
-    this.registerSequenceStepEvent();
-    this.registerFinishSequenceEvent();
-  }
-
-  componentDidMount() {
-    console.log('componentDidMount');
-    setTimeout(() => {
-      let appTourSequence = new AppTourSequence();
-      console.log('data', this.appTourTargets);
-      this.appTourTargets.forEach(appTourTarget => {
-        appTourSequence.add(appTourTarget);
-      });
-
-      AppTour.ShowSequence(appTourSequence);
-    }, 1000);
-  }
-
-  registerSequenceStepEvent = () => {
-    if (this.sequenceStepListener) {
-      this.sequenceStepListener.remove();
-    }
-    this.sequenceStepListener = DeviceEventEmitter.addListener(
-      'onShowSequenceStepEvent',
-      (e: Event) => {
-        console.log('registerSequenceStepEvent', e, this.appTourTargets);
-      },
-    );
+class App extends Component {
+  static propTypes = {
+    start: PropTypes.func.isRequired,
+    copilotEvents: PropTypes.shape({
+      on: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
-  registerFinishSequenceEvent = () => {
-    if (this.finishSequenceListener) {
-      this.finishSequenceListener.remove();
-    }
-    this.finishSequenceListener = DeviceEventEmitter.addListener(
-      'onFinishSequenceEvent',
-      (e: Event) => {
-        console.log('registerFinishSequenceEvent', e);
-      },
-    );
+  state = {
+    secondStepActive: true,
+  };
+
+  componentDidMount() {
+    // this.props.copilotEvents.on('stepChange', this.handleStepChange);
+    this.props.start();
+  }
+
+  handleStepChange = step => {
+    console.log(`Current step is: ${step.name}`);
   };
 
   render() {
     return (
       <View style={styles.container}>
-        <Top
-          style={styles.top}
-          addAppTourTarget={appTourTarget => {
-            this.appTourTargets.push(appTourTarget);
-          }}
-        />
-        <Center
-          style={styles.center}
-          addAppTourTarget={appTourTarget => {
-            this.appTourTargets.push(appTourTarget);
-          }}
-        />
-        <Bottom
-          style={styles.bottom}
-          addAppTourTarget={appTourTarget => {
-            this.appTourTargets.push(appTourTarget);
-          }}
-        />
+        <CopilotStep
+          text="Hey! This is the first step of the tour!"
+          order={1}
+          name="openApp">
+          <WalkthroughableText style={styles.title}>
+            {'Welcome to the demo of\n"React Native Copilot"'}
+          </WalkthroughableText>
+        </CopilotStep>
+        <View style={styles.middleView}>
+          <CopilotStep
+            active={this.state.secondStepActive}
+            text="Here goes your profile picture!"
+            order={2}
+            name="secondText">
+            <WalkthroughableImage
+              source={{
+                uri: 'https://cdn.pixabay.com/photo/2020/06/13/03/40/flower-5292556_960_720.jpg',
+              }}
+              style={styles.profilePhoto}
+            />
+          </CopilotStep>
+          <View style={styles.activeSwitchContainer}>
+            <Text>Profile photo step activated?</Text>
+            <View style={{flexGrow: 1}} />
+            <Switch
+              onValueChange={secondStepActive =>
+                this.setState({secondStepActive})
+              }
+              value={this.state.secondStepActive}
+            />
+          </View>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => this.props.start()}>
+            <Text style={styles.buttonText}>START THE TUTORIAL!</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.row}>
+          <CopilotStep
+            text="Here is an item in the corner of the screen."
+            order={3}
+            name="thirdText">
+            <WalkthroughableText style={styles.tabItem}>
+              <Icon name="ios-contact" size={40} color="#888" />
+            </WalkthroughableText>
+          </CopilotStep>
+
+          <Icon
+            style={styles.tabItem}
+            name="ios-game-controller-b"
+            size={40}
+            color="#888"
+          />
+          <Icon
+            style={styles.tabItem}
+            name="ios-globe"
+            size={40}
+            color="#888"
+          />
+          <Icon
+            style={styles.tabItem}
+            name="ios-navigate-outline"
+            size={40}
+            color="#888"
+          />
+          <Icon
+            style={styles.tabItem}
+            name="ios-rainy"
+            size={40}
+            color="#888"
+          />
+        </View>
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  top: {
-    flex: 1,
-  },
-  center: {
-    flex: 1,
-  },
-  bottom: {
-    flex: 1,
-  },
-});
+export default copilot({
+  animated: true, // Can be true or false
+  overlay: 'svg', // Can be either view or svg
+})(App);

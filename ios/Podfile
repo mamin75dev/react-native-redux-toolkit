@@ -17,6 +17,10 @@ target 'tests' do
   pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
 
 
+  pod 'RNAppTour', :path => '../node_modules/onsensei-react-native-app-tour'
+
+  pod 'RNImageTools', :path => '../node_modules/react-native-image-tools-wm'
+
   target 'testsTests' do
     inherit! :complete
     # Pods for testing

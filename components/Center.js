@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Button, Platform} from 'react-native';
 
-import {AppTourView} from 'react-native-app-tour';
+import {AppTourView} from 'onsensei-react-native-app-tour';
 
 class Center extends Component {
   render() {
