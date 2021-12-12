@@ -24,6 +24,7 @@ const uri =
 function App() {
   return (
     <TourGuideProvider
+      androidStatusBarVisible={true}
       {...{
         borderRadius: 16,
       }}>

@@ -8,7 +8,7 @@ import {
   NativeModules,
 } from 'react-native';
 import {PERMISSIONS} from 'react-native-permissions';
-import {checkPermission, requestPermission} from './persmissionHelper';
+import {checkPermission, requestPermission} from '../../persmissionHelper';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 const {InAppUpdate, ReactToast, VersionData} = NativeModules;
 const App = () => {

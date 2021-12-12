@@ -8,64 +8,59 @@ import {
   Image,
 } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-// import CameraRoll from '@react-native-community/cameraroll';
-// import RNFS from 'react-native-fs';
+import Canvas from 'react-native-canvas';
+import ViewShot, {captureScreen} from 'react-native-view-shot';
+import CameraRoll from '@react-native-community/cameraroll';
+import RNFS from 'react-native-fs';
+import BarcodeCreatorViewManager, {
+  BarcodeFormat,
+} from 'react-native-barcode-creator';
 
-// const {ReactToast} = NativeModules;
-
-import RNImageTools from 'react-native-image-tools-wm';
-
-import ImgToBase64 from 'react-native-image-base64';
-const mergeImages = require('merge-base64');
+const {ReactToast} = NativeModules;
 
 const App = () => {
-  let svg = React.createRef();
+  let viewShot = React.createRef();
 
-  const [imageURI, setIMageUri] = React.useState();
+  const [imageURI, setImageUri] = React.useState();
 
   const saveQrToDisk = () => {
-    svg.toDataURL(data => {
-      const whiteback = Image.resolveAssetSource(
-        require('./Assets/Images/whiteback.jpg'),
-      );
-      // let mergedImage;
-      // ImgToBase64.getBase64String(whiteback.uri)
-      //   .then(async base64String => {
-      //     console.log(base64String, data)
-      //     mergedImage = await mergeImages([base64String, data]);
-      //     console.log('mergedImage', mergedImage);
-      //   })
-      //   .catch(err => console.log(err));
-
-      //
-      // // const image = Image.resolveAssetSource({
-      // //   uri: ,
-      // // });
-      // console.log('data', image);
-      RNImageTools.merge([whiteback.uri, `data:image/png;base64,${data}`])
-        .then(({uri, width, height}) => {
-          console.log(uri);
-
-          // Sync with your app state
-          // RNFS.writeFile(
-          //   RNFS.CachesDirectoryPath + '/some-name.png',
-          //   data,
-          //   'base64',
-          // )
-          //   .then(success => {
-          //     console.log('success', success);
-          //     return CameraRoll.save(
-          //       RNFS.CachesDirectoryPath + '/some-name.png',
-          //       'photo',
-          //     );
-          // })
-          // .then(() => {
-          //   this.setState({busy: false, imageSaved: true});
-          // ReactToast.showToast('Saved to gallery !!');
-          // });
-        })
-        .catch(console.error);
+    console.log('svg', viewShot);
+    viewShot.capture().then(uri => {
+      return CameraRoll.save(uri, 'photo');
     });
+    // captureScreen({
+    //   format: 'jpg',
+    //   quality: 0.8,
+    // }).then(
+    //   uri => {
+        
+    //   },
+    //   error => console.error('Oops, snapshot failed', error),
+    // );
+    // ViewShot.takeSnapshot(viewShot, {
+    //   format: 'jpeg',
+    //   quality: 0.8,
+    // }).then(
+    //   uri => console.log('Image saved to', uri),
+    //   error => console.error('Oops, snapshot failed', error),
+    // );
+    // svg.toDataURL(data => {
+    //   console.log('svgdata', data);
+    // });
+
+    // svg.toDataURL(data => {
+    //   RNFS.writeFile(RNFS.CachesDirectoryPath + '/amin.png', data, 'base64')
+    //     .then(success => {
+    // return CameraRoll.save(
+    //   RNFS.CachesDirectoryPath + '/amin.png',
+    //   'photo',
+    // );
+    //     })
+    //     .then(() => {
+    //       ReactToast.showToast('saved');
+    //     })
+    //     .catch(e => {});
+    // });
   };
 
   return (
@@ -76,13 +71,38 @@ const App = () => {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <QRCode
+      <ViewShot ref={ref => (viewShot = ref)} captureMode="mount">
+        <BarcodeCreatorViewManager
+          value={
+            '?payment_code=34004732&amount=10000transaction_id=4223kjjnl;kkmdk22'
+          }
+          background={'#fff'}
+          foregroundColor={'#000'}
+          format={BarcodeFormat.AZTEC}
+          // encodedValue={'UTF-8'}
+          style={{
+            width: 200,
+            height: 200,
+          }}
+        />
+      </ViewShot>
+      {/* <QRCode
+        quietZone={20}
         value={
           '?payment_code=34004732&amount=10000transaction_id=4223kjjnl;kkmdk22'
         }
+        // color={"#006252"}
         size={200}
-        getRef={c => (svg = c)}
-      />
+        style={{padding: 10}}
+        // getRef={c => (svg = c)}
+      /> */}
+      {/* <Image
+        style={{
+          width: 120,
+          height: 120,
+        }}
+        source={{uri: imageURI}}
+      /> */}
       <TouchableNativeFeedback onPress={saveQrToDisk}>
         <View styl={{backgroundColor: 'red', padding: 10}}>
           <Text>Save To Gallery</Text>
