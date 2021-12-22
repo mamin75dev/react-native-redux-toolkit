@@ -52,5 +52,5 @@ const addTodosAsync = (todo: Todo) => async (dispatch: AppDispatch) => {
 const { addTodo, getTodos } = todoSlice.actions;
 const showTodo = (state: RootState) => state.todos.data
 
-export { Todo, addTodo, getTodos, showTodo, getTodosAsync, addTodosAsync };
+export { Todo, TodoState, addTodo, getTodos, showTodo, getTodosAsync, addTodosAsync };
 export default todoSlice.reducer;
